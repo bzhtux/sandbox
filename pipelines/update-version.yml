@@ -1,0 +1,37 @@
+---
+resources:
+- name: version
+  type: semver
+  source:
+    driver: git
+    uri: https://github.com/bzhtux/sandbox.git
+    branch: master
+    initial_version: '0.0.1'
+    file: concourse_repipe_version
+
+- name: get-version
+  plan:
+  - get: version
+    trigger: true
+  - task: display-version
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}      
+      inputs:
+      - name: version
+      outputs:
+      - name: new_version
+      run:
+        path: cat
+        args: [version/number]
+  - task: get-fly-cli
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}      
+      run:
+        path: curl
+        args: ["http://localhost:8080/api/v1/cli?arch=amd64&platform=linux", "-o", "/tmp/fly"]
