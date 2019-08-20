@@ -11,9 +11,10 @@ wget -o /tmp/fly "http://10.36.68.29:8080/api/v1/cli?arch=amd64&platform=linux"
 chmod +x /tmp/fly
 
 ls -l /tmp/fly
+whoami
 
 # debug
-file /tmp/fly
+type /tmp/fly
 /tmp/fly -v
 
 # LOGIN
