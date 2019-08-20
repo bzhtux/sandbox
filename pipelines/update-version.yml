@@ -13,7 +13,7 @@ resources:
   source:
     uri: https://github.com/bzhtux/sandbox.git
     branch: master
-    paths: [pipelines/version-pipeline.yml]
+    # paths: [pipelines/version-pipeline.yml]
 
 jobs:
 - name: get-version

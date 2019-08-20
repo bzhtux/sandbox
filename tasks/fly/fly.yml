@@ -7,9 +7,9 @@ inputs:
 
 
 params:
-  USERNAME
-  PASSWORD
-  NEW_VERSION
+  USERNAME:
+  PASSWORD:
+  NEW_VERSION:
 
 
 run:
