@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+-set -xeuo pipefail
+
+echo "* Hello from fly.sh"
+
 # DL fli-cli
 wget -o /tmp/fly "http://10.36.68.29:8080/api/v1/cli?arch=amd64&platform=linux"
 

@@ -7,8 +7,8 @@ image_resource:
   source:
     repository: busybox
 
-# inputs:
-# - name: ci
+inputs:
+- name: ci
 
 
 params:
