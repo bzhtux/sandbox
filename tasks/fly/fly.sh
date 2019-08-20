@@ -9,7 +9,7 @@ echo "* Hello from fly.sh"
 wget -O /tmp/fly.tgz -q "https://github.com/concourse/concourse/releases/download/v5.4.1/fly-5.4.1-linux-amd64.tgz"
 
 
-tar -xzf /tmp/fly.tgz -c /usr/local/bin/
+tar -xzf /tmp/fly.tgz -C /usr/local/bin/
 
 ls -l
 
