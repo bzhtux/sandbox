@@ -8,11 +8,19 @@ resources:
     branch: master
     initial_version: '0.0.1'
     file: concourse_repipe_version
+- name: ci
+  type: git
+  source:
+    uri: https://github.com/bzhtux/sandbox.git
+    branch: master
+    paths: [pipelines/version-pipeline.yml]
 
+jobs:
 - name: get-version
   plan:
   - get: version
     trigger: true
+  - get: ci
   - task: display-version
     config:
       platform: linux
@@ -26,12 +34,9 @@ resources:
       run:
         path: cat
         args: [version/number]
-  - task: get-fly-cli
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source: {repository: busybox}      
-      run:
-        path: curl
-        args: ["http://localhost:8080/api/v1/cli?arch=amd64&platform=linux", "-o", "/tmp/fly"]
+  - task: re-fly
+    file: ci/tasks/fly/fly.yml
+    params:
+      USERNAME: ((username))
+      PASSWORD: ((password))
+      NEW_VERSION: new_version
