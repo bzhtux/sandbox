@@ -24,4 +24,4 @@ chmod +x /tmp/fly
 
 # RE FLY       
 /tmp/fly -t local sp -p display-version -c ci/pipelines/version-pipeline.yml --var version="${NEW_VERSION}" --non-interactive
-/tmp/fly -t local e -p display-version -c ci/pipelines/version-pipeline.yml
+/tmp/fly -t local e -c ci/pipelines/version-pipeline.yml --var version="${NEW_VERSION}"
