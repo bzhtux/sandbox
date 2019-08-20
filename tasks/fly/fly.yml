@@ -18,4 +18,4 @@ params:
 
 
 run:
-  path: ci/ci/tasks/fly/fly.sh
+  path: ci/tasks/fly/fly.sh
