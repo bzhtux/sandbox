@@ -8,8 +8,11 @@ echo "* Hello from fly.sh"
 # DL fli-cli
 wget -O /tmp/fly.tgz -q "https://github.com/concourse/concourse/releases/download/v5.4.1/fly-5.4.1-linux-amd64.tgz"
 
+cd /tmp
+tar -xzf /tmp/fly.tgz
+cp fly /usr/local/bin/
 
-tar -xzf /tmp/fly.tgz -C /usr/local/bin/
+cd $OLDPWD
 
 ls -l
 
