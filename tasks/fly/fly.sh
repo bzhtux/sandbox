@@ -4,10 +4,15 @@ set -x
 
 echo "* Hello from fly.sh"
 
-env
 
 # DL fli-cli
-wget -o /tmp/fly "http://127.0.0.1:8080/api/v1/cli?arch=i386&platform=linux"
+wget -o /tmp/fly "https://github.com/concourse/concourse/releases/download/v5.4.1/fly-5.4.1-linux-amd64.tgz"
+
+cd /tmp
+
+tar xvf fly-5.4.1-linux-amd64.tgz
+
+ls -ltr
 
 # CHMOD +x
 chmod +x /tmp/fly
