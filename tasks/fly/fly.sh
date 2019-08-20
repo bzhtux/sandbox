@@ -4,6 +4,8 @@ set -x
 
 echo "* Hello from fly.sh"
 
+env
+
 # DL fli-cli
 wget -o /tmp/fly "http://127.0.0.1:8080/api/v1/cli?arch=i386&platform=linux"
 
