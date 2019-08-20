@@ -22,7 +22,7 @@ chmod +x /tmp/fly
 # LOGIN
 /tmp/fly -t local login --concourse-url http://172.20.0.3:8080/ -u "${USERNAME}" -p "${PASSWORD}"
 
-ls -l ${NEW_VERSION}
+NEW_VERSION=$(cat new_version/version)
 
 # RE FLY       
 /tmp/fly -t local sp -p display-version -c ci/pipelines/version-pipeline.yml --var version="${NEW_VERSION}" --non-interactive
