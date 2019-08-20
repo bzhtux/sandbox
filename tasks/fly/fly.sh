@@ -5,13 +5,10 @@ set -x
 echo "* Hello from fly.sh"
 
 # DL fli-cli
-wget -o /tmp/fly "http://10.36.68.29:8080/api/v1/cli?arch=i386&platform=linux"
+wget -o /tmp/fly "http://127.0.0.1:8080/api/v1/cli?arch=i386&platform=linux"
 
 # CHMOD +x
 chmod +x /tmp/fly
-
-# debug
-cat /tmp/fly
 
 # LOGIN
 /tmp/fly login -t http://10.36.68.29:8080/ -u "${USERNAME}" -p "${PASSWORD}"
