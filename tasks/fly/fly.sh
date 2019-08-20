@@ -6,7 +6,7 @@ echo "* Hello from fly.sh"
 
 
 # DL fli-cli
-wget -o /tmp/fly.tgz "https://github.com/concourse/concourse/releases/download/v5.4.1/fly-5.4.1-linux-amd64.tgz"
+wget -O /tmp/fly.tgz "https://github.com/concourse/concourse/releases/download/v5.4.1/fly-5.4.1-linux-amd64.tgz" --verbose
 
 cd /tmp
 
