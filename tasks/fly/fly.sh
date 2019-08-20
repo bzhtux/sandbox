@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -xeuo pipefail
+set -x
 
 echo "* Hello from fly.sh"
 
