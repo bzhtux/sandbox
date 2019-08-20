@@ -12,7 +12,7 @@ cd /tmp
 
 cat /tmp/fly.tgz
 
-tar xzvf fly.tgz
+tar -xzvf fly.tgz
 
 ls -ltr
 
