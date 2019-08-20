@@ -22,4 +22,4 @@ run:
   path: /bin/ls
   args:
   - "-l"
-  - "ci/"
+  - "ci/tasks/fly/"
