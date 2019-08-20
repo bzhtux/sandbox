@@ -18,9 +18,9 @@ params:
 
 
 run:
-  #path: ci/tasks/fly/fly.sh
-  path: bash
-  args:
-  - "-x"
-  - "-c"
-  - "ci/tasks/fly/fly.sh"
+  path: ./ci/tasks/fly/fly.sh
+#  path: bash
+#  args:
+#  - "-x"
+#  - "-c"
+#  - "ci/tasks/fly/fly.sh"
