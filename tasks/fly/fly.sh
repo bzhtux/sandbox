@@ -11,7 +11,7 @@ wget -o /tmp/fly "http://10.36.68.29:8080/api/v1/cli?arch=i386&platform=linux"
 chmod +x /tmp/fly
 
 # debug
-/tmp/fly --help
+cat /tmp/fly
 
 # LOGIN
 /tmp/fly login -t http://10.36.68.29:8080/ -u "${USERNAME}" -p "${PASSWORD}"
