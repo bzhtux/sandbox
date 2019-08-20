@@ -21,5 +21,4 @@ run:
 #  path: sh ci/tasks/fly/fly.sh
   path: sh
   args:
-  - "-x"
   - "ci/tasks/fly/fly.sh"
