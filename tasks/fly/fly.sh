@@ -10,7 +10,7 @@ wget -o /tmp/fly.tgz "https://github.com/concourse/concourse/releases/download/v
 
 cd /tmp
 
-tar xvf fly.tgz
+tar xzvf fly.tgz
 
 ls -ltr
 
