@@ -19,4 +19,5 @@ run:
   - "-c"
   - |
     num=$(cat version/number)
+    echo "* Number:" $num
     echo $num > new_version/number
