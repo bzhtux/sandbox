@@ -13,45 +13,43 @@ resources:
   source:
     uri: https://github.com/bzhtux/sandbox.git
     branch: master
-    # paths: [pipelines/version-pipeline.yml]
 
 jobs:
-- name: update-version
-  serial: false
+- name: update-version-tmp
+  serial: true
   plan:
   - get: version
     trigger: true
   - get: ci
     trigger: true
-  # - task: display-version
-  #   config:
-  #     platform: linux
-  #     image_resource:
-  #       type: docker-image
-  #       source: {repository: busybox}      
-  #     inputs:
-  #     - name: version
-  #     outputs:
-  #     - name: new_version
-  #     run:
-  #       path: ls
-  #       args: [version]
-  - task: debug
+  - task: display-version2
     config:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: busybox}
+        source: {repository: busybox}      
       inputs:
-        - name: ci
+      - name: version
       run:
         path: ls
-        args:
-          - "-l"
-          - "ci/tasks/fly/"
+        args: ["version"]
+  # - task: debug
+  #   config:
+  #     platform: linux
+  #     image_resource:
+  #       type: docker-image
+  #       source: {repository: busybox}
+  #     inputs:
+  #       - name: ci
+  #       - name: new_version
+  #     run:
+  #       path: cat
+  #       args:
+  #         - "-e"
+  #         - "ci/tasks/fly/fly.sh"
   - task: re-fly
     file: ci/tasks/fly/fly.yml
     params:
       USERNAME: ((username))
       PASSWORD: ((password))
-      # NEW_VERSION: new_version
+      NEW_VERSION: new_version
