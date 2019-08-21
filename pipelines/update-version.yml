@@ -36,19 +36,19 @@ jobs:
   #     run:
   #       path: ls
   #       args: [version]
-  # - task: debug
-  #   config:
-  #     platform: linux
-  #     image_resource:
-  #       type: docker-image
-  #       source: {repository: busybox}
-  #     inputs:
-  #       - name: ci
-  #     run:
-  #       path: ls
-  #       args:
-  #         - "-l"
-  #         - "ci/tasks/fly/"
+  - task: debug
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      inputs:
+        - name: ci
+      run:
+        path: ls
+        args:
+          - "-l"
+          - "ci/tasks/fly/"
   - task: re-fly
     file: ci/tasks/fly/fly.yml
     params:
