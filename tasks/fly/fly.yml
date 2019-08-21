@@ -9,7 +9,7 @@ image_resource:
 
 inputs:
 - name: ci
-# - name: new_version
+- name: new_version
 
 
 params:
