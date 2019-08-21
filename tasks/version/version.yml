@@ -21,3 +21,4 @@ run:
     num=$(cat version/number)
     echo "* Number:" $num
     echo $num > new_version/number
+    cat new_version/number
