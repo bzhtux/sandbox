@@ -22,31 +22,8 @@ jobs:
     trigger: true
   - get: ci
     trigger: true
-  - task: display-version2
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source: {repository: busybox}      
-      inputs:
-      - name: version
-      run:
-        path: ls
-        args: ["version"]
-  # - task: debug
-  #   config:
-  #     platform: linux
-  #     image_resource:
-  #       type: docker-image
-  #       source: {repository: busybox}
-  #     inputs:
-  #       - name: ci
-  #       - name: new_version
-  #     run:
-  #       path: cat
-  #       args:
-  #         - "-e"
-  #         - "ci/tasks/fly/fly.sh"
+  - task: get-version
+    file: ci/tasks/version/version.yml
   - task: re-fly
     file: ci/tasks/fly/fly.yml
     params:
