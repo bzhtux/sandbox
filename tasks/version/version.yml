@@ -16,7 +16,7 @@ outputs:
 run:
   path: sh
   args:
-  - "-c"
+  - "-cx"
   - |
     num=$(cat version/number)
     echo "* Number:" $num
