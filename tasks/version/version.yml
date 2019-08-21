@@ -15,4 +15,4 @@ outputs:
 
 run:
   path: cat
-  args: ["version/number"]
+  args: ["version/number", "new_version/version"]
