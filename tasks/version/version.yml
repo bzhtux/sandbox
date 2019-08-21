@@ -14,7 +14,8 @@ outputs:
 - name: new_version
 
 run:
-  path: sh
+  path: bash
   args:
-  - "|"
-  - "cat version/number > new_version/number"
+  - "-c"
+  - |
+    cat version/number > new_version/number
