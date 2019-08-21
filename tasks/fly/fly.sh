@@ -1,8 +1,6 @@
 #!/bin/bash
 
-set -x
-
-echo "* Hello from fly.sh"
+set -euo pipefail
 
 
 # DL fli-cli
@@ -14,7 +12,7 @@ tar -xzf /tmp/fly.tgz -C /tmp
 
 # cd $OLDPWD
 
-/bin/ls -ltr
+/bin/ls -ltr new_version/
 
 # CHMOD +x
 chmod +x /tmp/fly
