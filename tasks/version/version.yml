@@ -14,7 +14,7 @@ outputs:
 - name: new_version
 
 run:
-  path: bash
+  path: sh
   args:
   - "-c"
   - |
