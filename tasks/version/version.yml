@@ -14,5 +14,5 @@ outputs:
 - name: new_version
 
 run:
-  path: cp
-  args: ["version/number", "new_version/"]
+  path: cat
+  args: ["version/number"]
