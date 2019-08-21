@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -xeuo pipefail
 
 
 # DL fli-cli
@@ -11,9 +11,6 @@ tar -xzf /tmp/fly.tgz -C /tmp
 # cp fly /usr/local/bin/
 
 # cd $OLDPWD
-
-/bin/ls -ltr new_version/
-cat new_version/number
 
 # CHMOD +x
 chmod +x /tmp/fly
