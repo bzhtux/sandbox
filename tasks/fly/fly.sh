@@ -13,6 +13,7 @@ tar -xzf /tmp/fly.tgz -C /tmp
 # cd $OLDPWD
 
 /bin/ls -ltr new_version/
+cat new_version/number
 
 # CHMOD +x
 chmod +x /tmp/fly

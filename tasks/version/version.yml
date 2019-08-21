@@ -15,4 +15,4 @@ outputs:
 
 run:
   path: cp
-  args: ["version/number", "new_version/number"]
+  args: ["version/number", "new_version/"]
