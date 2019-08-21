@@ -18,4 +18,5 @@ run:
   args:
   - "-c"
   - |
-    cat version/number > new_version/number
+    num=$(cat version/number)
+    echo $num > new_version/number
