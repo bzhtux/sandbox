@@ -11,7 +11,7 @@ resources:
   type: git
   source:
     uri: ((github.url)):((github.user))/((github.repo)).git
-    branch: master
+    branch: feat/run-local-ci
     private_key: ((github.key))
     paths:
     - platform
