@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = "${file("/Users/yfoeillet/Documents/workdir/creds/gcp/terraform/cso-pcfs-emea-bzhtux-terraform-service-account.json")}"
+  credentials = "${file("$HOME/gcp-creds/service-account-1567884587.json")}"
   project     = "${var.project}"
   region      = "${var.region}"
   zone        = "${var.region}-c"

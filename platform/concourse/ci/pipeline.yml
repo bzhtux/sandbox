@@ -35,7 +35,6 @@ resources:
     backend_config:
       bucket: bzhtux-tf-state
       prefix: concourse/((cp))/terraform.tfstate
-    #   region: europe-west6
       credentials: ((gcp.credentials))
   icon: docker
 
@@ -43,21 +42,34 @@ resources:
   type: gcs
   source:
       bucket: gcp-creds
-      regexp: bootstrap-tf.json
+      regexp: service-account-(.*).json
       json_key: ((gcp.credentials))
-  icon: docker
+  icon: github-circle
 
 jobs:
 - name: terraform-plan
   plan:
+  - in_parallel:
     - get: ci-repo
     - get: ci-image
     - get: gcp-creds
-    - put: terraform
-      params:
-        env_name: ((cp))
-        plan_only: true
-        terraform_source: ci-repo/platform/concourse/terraform/((cp))
+  - task: list-creds
+    image: ci-image
+    config:
+      platform: linux
+      inputs:
+      - name: gcp-creds
+      run:
+        path: sh
+        args:
+        - -exec
+        - |
+          ls -l gcp-creds/
+  - put: terraform
+    params:
+      env_name: ((cp))
+      plan_only: true
+      terraform_source: ci-repo/platform/concourse/terraform/((cp))
 
 - name: terraform-apply
   plan:
