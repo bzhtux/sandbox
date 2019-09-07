@@ -3,6 +3,11 @@ variable "project" {
   default = "cso-pcfs-emea-bzhtux"
 }
 
+variable "gcp_creds" {
+  type    = "string"
+}
+
+
 variable "region" {
   type    = "string"
   default = "europe-west1"

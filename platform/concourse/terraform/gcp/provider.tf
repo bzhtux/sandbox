@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = "${file("$HOME/gcp-creds/service-account-1567884587.json")}"
+  credentials = "${var.gcp_creds}"
   project     = "${var.project}"
   region      = "${var.region}"
   zone        = "${var.region}-c"

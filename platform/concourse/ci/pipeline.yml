@@ -70,6 +70,8 @@ jobs:
       env_name: ((cp))
       plan_only: true
       terraform_source: ci-repo/platform/concourse/terraform/((cp))
+      vars:
+        gcp_creds: ((gcp.credentials))
 
 - name: terraform-apply
   plan:
