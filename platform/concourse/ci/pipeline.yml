@@ -12,7 +12,7 @@ resources:
   source:
     uri: ((github.url)):((github.user))/((github.repo)).git
     branch: feat/run-local-ci
-    private_key: ((github.key))
+    private_key: ((github_key))
     paths:
     - platform
   icon: git
@@ -20,7 +20,7 @@ resources:
 - name: ci-image
   type: docker-image
   source: 
-    repository: bzhtux/pivotal:latest
+    repository: bzhtux/pivotal
   icon: docker
 
 - name: terraform
@@ -28,20 +28,32 @@ resources:
   source:
     backend_type: gcs
     backend_config:
-        bucket: bzhtux-tf-state
-        prefix: concourse/((cp))/terraform.tfstate
-        region: europe-west6
-        credentials: ((gcp.credentials))
-    vars:
-      tag_name: concourse
-    env:
-      AWS_ACCESS_KEY_ID: {{environment_access_key}}
-      AWS_SECRET_ACCESS_KEY: {{environment_secret_key}}
+      bucket: bzhtux-tf-state
+      prefix: concourse/((cp))/terraform.tfstate
+      region: europe-west6
+      credentials: ((gcp.credentials))
+  icon: docker
 
 jobs:
-- name: terraform
+- name: terraform-plan
   plan:
-  - in_parallel:
+    - get: ci-repo
+    - get: ci-image
+    - put: terraform
+      params:
+        env_name: ((cp))
+        plan_only: true
+        terraform_source: ci-repo/platform/concourse/terraform
+
+- name: terraform-apply
+  plan:
     - get: ci-repo
     - get: ci-image
     - get: terraform
+      trigger: false
+      passed: [terraform-plan]
+    - put: terraform
+      params:
+        env_name: ((cp))
+        plan_run: true
+        terraform_source: ci-repo/platform/concourse/terraform
