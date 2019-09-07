@@ -6,6 +6,11 @@ resource_types:
     repository: ljfranklin/terraform-resource
     tag: latest
 
+- name: gcs
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+
 resources:
 - name: ci-repo
   type: git
@@ -30,8 +35,16 @@ resources:
     backend_config:
       bucket: bzhtux-tf-state
       prefix: concourse/((cp))/terraform.tfstate
-      region: europe-west6
+    #   region: europe-west6
       credentials: ((gcp.credentials))
+  icon: docker
+
+- name: gcp-creds
+  type: gcs
+  source:
+      bucket: gcp-creds
+      regexp: bootstrap-tf.json
+      json_key: ((gcp.credentials))
   icon: docker
 
 jobs:
@@ -39,16 +52,18 @@ jobs:
   plan:
     - get: ci-repo
     - get: ci-image
+    - get: gcp-creds
     - put: terraform
       params:
         env_name: ((cp))
         plan_only: true
-        terraform_source: ci-repo/platform/concourse/terraform
+        terraform_source: ci-repo/platform/concourse/terraform/((cp))
 
 - name: terraform-apply
   plan:
     - get: ci-repo
     - get: ci-image
+    - get: gcp-creds
     - get: terraform
       trigger: false
       passed: [terraform-plan]
@@ -56,4 +71,4 @@ jobs:
       params:
         env_name: ((cp))
         plan_run: true
-        terraform_source: ci-repo/platform/concourse/terraform
+        terraform_source: ci-repo/platform/concourse/terraform/((cp))
