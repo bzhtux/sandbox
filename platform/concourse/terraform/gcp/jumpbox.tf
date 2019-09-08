@@ -11,11 +11,10 @@ resource "google_compute_instance" "jumpbox" {
     }
   }
 
-  scratch_disk {
-  }
+  scratch_disk {}
 
   network_interface {
-    subnetwork   = "${google_compute_subnetwork.jumpbox.self_link}"
+    subnetwork   = "${var.jbx_subnet}"
     access_config {
       nat_ip = "${google_compute_address.jumpbox-ip.address}"
     }
@@ -26,4 +25,8 @@ resource "google_compute_instance" "jumpbox" {
   }
 
   tags  = ["jbx-ssh"]
+
+  service_account {
+    scopes = ["compute-ro", "storage-ro"]
+  }
 }
