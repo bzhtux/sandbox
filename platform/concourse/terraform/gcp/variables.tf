@@ -7,10 +7,6 @@ variable "gcp_creds" {
   type    = "string"
 }
 
-variable "source_env" {
-  type    = "map"
-}
-
 
 variable "region" {
   type    = "string"

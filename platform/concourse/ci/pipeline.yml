@@ -77,11 +77,12 @@ jobs:
         env_name: ((cp))
         plan_run: true
         terraform_source: ci-repo/platform/concourse/terraform/((cp))
+        env:
+          TF_LOG: DEBUG        
         vars:
           gcp_creds: ((gcp.credentials))   
           ssh_pub_key: ((ssh.pub_key))  
-        env:
-          TF_LOG: DEBUG   
+   
 
 - name: terraform-destroy
   plan:
@@ -94,11 +95,11 @@ jobs:
         action: destroy
         env_name: ((cp))          
         terraform_source: ci-repo/platform/concourse/terraform/((cp))
+        env:
+          TF_LOG: DEBUG                  
         vars:
           gcp_creds: ((gcp.credentials))
           ssh_pub_key: ((ssh.pub_key))     
-        env:
-          TF_LOG: DEBUG          
       get_params:
         action: destroy
 
