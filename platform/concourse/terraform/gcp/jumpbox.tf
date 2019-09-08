@@ -21,7 +21,7 @@ resource "google_compute_instance" "jumpbox" {
     }
   }
 
-  metadata {
+  metadata = {
       sshKeys   = "${var.ssh_pub_key}"
   }
 
