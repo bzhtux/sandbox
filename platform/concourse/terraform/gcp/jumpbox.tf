@@ -11,12 +11,12 @@ resource "google_compute_instance" "jumpbox" {
     }
   }
 
-  scratch_disk {}
+#   scratch_disk {}
 
   network_interface {
     subnetwork   = "${var.jbx_subnet}"
     access_config {
-    #   nat_ip = "${google_compute_address.jumpbox-ip.address}"
+      nat_ip = "${google_compute_address.jumpbox-ip.address}"
     }
   }
 
