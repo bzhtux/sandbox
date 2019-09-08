@@ -63,3 +63,11 @@ variable "dns_name" {
   default = "bzhtux-lab.net."
 }
 
+variable "jbx_machine_type" {
+  type    = "string"
+  default = "n1-standard-1"
+}
+
+variable "ssh_pub_key" {
+  type    = "string"
+}

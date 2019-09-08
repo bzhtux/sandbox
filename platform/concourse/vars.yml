@@ -3,3 +3,5 @@ github:
   url: git@github.com
   user: bzhtux
   repo: sandbox
+ssh:
+  user: yfoeillet

@@ -72,6 +72,7 @@ jobs:
       terraform_source: ci-repo/platform/concourse/terraform/((cp))
       vars:
         gcp_creds: ((gcp.credentials))
+        ssh_pub_key: ((ssh.pub_key))
 
 - name: terraform-apply
   plan:
@@ -79,7 +80,7 @@ jobs:
     - get: ci-image
     - get: gcp-creds
     - get: terraform
-      trigger: false
+      trigger: true
       passed: [terraform-plan]
     - put: terraform
       params:
@@ -87,11 +88,15 @@ jobs:
         plan_run: true
         terraform_source: ci-repo/platform/concourse/terraform/((cp))
         vars:
-          gcp_creds: ((gcp.credentials))        
+          gcp_creds: ((gcp.credentials))   
+          ssh_pub_key: ((ssh.pub_key))     
 
 - name: terraform-destroy
   plan:
     - get: ci-repo
+    - get: terraform
+      trigger: false
+      passed: [terraform-plan]
     - put: terraform
       params:
         action: destroy
