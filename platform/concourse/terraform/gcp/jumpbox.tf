@@ -17,12 +17,12 @@ resource "google_compute_instance" "jumpbox" {
   network_interface {
     subnetwork   = "${google_compute_subnetwork.jumpbox.self_link}"
     access_config {
-        nat_ip = "${google_compute_address.jumpbox-ip.address}"
+      nat_ip = "${google_compute_address.jumpbox-ip.address}"
     }
   }
 
   metadata = {
-      sshKeys   = "${var.ssh_pub_key}"
+    sshKeys   = "${var.ssh_pub_key}"
   }
 
   tags  = ["jbx-ssh"]
