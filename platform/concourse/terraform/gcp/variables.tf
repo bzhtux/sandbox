@@ -7,9 +7,9 @@ variable "gcp_creds" {
   type    = "string"
 }
 
-variable "source.env" {
-#   type    = "map"
-# }
+variable "source_env" {
+  type    = "map"
+}
 
 
 variable "region" {
