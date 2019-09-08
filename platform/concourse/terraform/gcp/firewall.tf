@@ -1,14 +1,17 @@
 resource "google_compute_firewall" "jbx-ssh" {
-  name  = "jbx-ssh"
-  network   = "${google_compute_network.concourse.name}"
+  name          = "jbx-ssh"
+  network       = "${google_compute_network.concourse.name}"
+  target_tags   = ["jbx-ssh"]
+
+allow {
+    protocol    = "icmp"
+}
 
   allow {
-      protocol  = "tcp"
-      ports     = ["22"]
+    protocol    = "tcp"
+    ports       = ["22"]
   }
 
   source_ranges = ["0.0.0.0/0"]
-
-  target_tags = ["jbx-ssh"]
 }
 
