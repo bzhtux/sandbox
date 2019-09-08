@@ -43,7 +43,7 @@ resource "google_compute_address" "nat-address" {
 }
 
 resource "google_compute_router_nat" "advanced-nat" {
-  name                               = "ci_pivotal_nat"
+  name                               = "ci-pivotal-nat"
   router                             = "${google_compute_router.nat-router.name}"
   region                             = "${var.region}"
   nat_ip_allocate_option             = "MANUAL_ONLY"
