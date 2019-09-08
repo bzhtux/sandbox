@@ -96,7 +96,7 @@ jobs:
     - get: ci-repo
     - get: terraform
       trigger: false
-      passed: [terraform-plan]
+      passed: [terraform-apply]
     - put: terraform
       params:
         action: destroy

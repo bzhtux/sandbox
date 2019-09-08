@@ -17,7 +17,7 @@ resource "google_compute_instance" "jumpbox" {
   network_interface {
     subnetwork   = "${var.jbx_subnet}"
     access_config {
-        nat_ip = "${google_compute_address.jumpbox-ip.adress}"
+        nat_ip = "${google_compute_address.jumpbox-ip.address}"
     }
   }
 
