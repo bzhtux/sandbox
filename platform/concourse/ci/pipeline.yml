@@ -53,18 +53,6 @@ jobs:
     - get: ci-repo
     - get: ci-image
     - get: gcp-creds
-  - task: list-creds
-    image: ci-image
-    config:
-      platform: linux
-      inputs:
-      - name: gcp-creds
-      run:
-        path: sh
-        args:
-        - -exec
-        - |
-          ls -l gcp-creds/
   - put: terraform
     params:
       env_name: ((cp))
@@ -104,5 +92,6 @@ jobs:
         terraform_source: ci-repo/platform/concourse/terraform/((cp))
         vars:
           gcp_creds: ((gcp.credentials))
+          ssh_pub_key: ((ssh.pub_key))     
       get_params:
         action: destroy
