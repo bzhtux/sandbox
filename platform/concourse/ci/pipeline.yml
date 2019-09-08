@@ -61,6 +61,8 @@ jobs:
       vars:
         gcp_creds: ((gcp.credentials))
         ssh_pub_key: ((ssh.pub_key))
+        env:
+          TF_LOG: DEBUG
 
 - name: terraform-apply
   plan:
@@ -77,7 +79,9 @@ jobs:
         terraform_source: ci-repo/platform/concourse/terraform/((cp))
         vars:
           gcp_creds: ((gcp.credentials))   
-          ssh_pub_key: ((ssh.pub_key))     
+          ssh_pub_key: ((ssh.pub_key))  
+        env:
+          TF_LOG: DEBUG   
 
 - name: terraform-destroy
   plan:
@@ -93,5 +97,13 @@ jobs:
         vars:
           gcp_creds: ((gcp.credentials))
           ssh_pub_key: ((ssh.pub_key))     
+        env:
+          TF_LOG: DEBUG          
       get_params:
         action: destroy
+
+- name: bosh
+  plan:
+  - in_parallel:
+    - get: ci-repo
+    - get: terraform

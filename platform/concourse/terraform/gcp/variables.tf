@@ -7,6 +7,11 @@ variable "gcp_creds" {
   type    = "string"
 }
 
+variable "env" {
+  type    = "map"
+}
+
+
 variable "region" {
   type    = "string"
   default = "europe-west1"
