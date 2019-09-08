@@ -3,7 +3,7 @@ data "google_dns_managed_zone" "dns_zone" {
 }
 
 resource "google_dns_record_set" "jumpbox" {
-  name = "jumpbox.${data.google_dns_managed_zone.dns_zone.dns_name}"
+  name = "jbx.${data.google_dns_managed_zone.dns_zone.dns_name}"
   type = "A"
   ttl  = 60
 
@@ -13,7 +13,7 @@ resource "google_dns_record_set" "jumpbox" {
 }
 
 resource "google_dns_record_set" "concourse" {
-  name = "concourse.${data.google_dns_managed_zone.dns_zone.dns_name}"
+  name = "ci.${data.google_dns_managed_zone.dns_zone.dns_name}"
   type = "A"
   ttl  = 60
 

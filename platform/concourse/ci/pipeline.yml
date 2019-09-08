@@ -86,3 +86,18 @@ jobs:
         env_name: ((cp))
         plan_run: true
         terraform_source: ci-repo/platform/concourse/terraform/((cp))
+        vars:
+          gcp_creds: ((gcp.credentials))        
+
+- name: terraform-destroy
+  plan:
+    - get: ci-repo
+    - put: terraform
+      params:
+        action: destroy
+        env_name: ((cp))          
+        terraform_source: ci-repo/platform/concourse/terraform/((cp))
+        vars:
+          gcp_creds: ((gcp.credentials))
+      get_params:
+        action: destroy
