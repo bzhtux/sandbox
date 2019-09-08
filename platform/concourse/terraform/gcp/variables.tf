@@ -55,7 +55,7 @@ variable "internetless" {
 
 variable "dns_zone" {
   type    = "string"
-  default = "pivotal.bzhtux-lab.net."
+  default = "pivotal"
 }
 
 variable "dns_name" {
