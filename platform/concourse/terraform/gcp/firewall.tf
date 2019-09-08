@@ -1,6 +1,6 @@
 resource "google_compute_firewall" "jbx-ssh" {
   name  = "jbx-ssh"
-  network   = "${google_compute_subnetwork.jumpbox}"
+  network   = "${google_compute_network.concourse.self_link}"
 
   allow {
       protocol  = "tcp"
