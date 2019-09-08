@@ -102,8 +102,10 @@ jobs:
       get_params:
         action: destroy
 
-- name: bosh
+- name: deploy-bosh
   plan:
   - in_parallel:
     - get: ci-repo
     - get: terraform
+      trigger: true
+      passed: [terraform-apply]
