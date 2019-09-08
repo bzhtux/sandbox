@@ -42,7 +42,7 @@ resources:
   type: gcs
   source:
       bucket: gcp-creds
-      regexp: service-account-(.*).json
+      regexp: concourse-(.*).json
       json_key: ((gcp.credentials))
   icon: github-circle
 

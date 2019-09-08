@@ -25,5 +25,5 @@ resource "google_compute_instance" "jumpbox" {
       sshKeys   = "${var.ssh_pub_key}"
   }
 
-  tags  = ["ssh"]
+  tags  = ["jbx-ssh"]
 }

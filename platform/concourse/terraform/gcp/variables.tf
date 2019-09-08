@@ -7,6 +7,10 @@ variable "gcp_creds" {
   type    = "string"
 }
 
+variable "cp" {
+  type    = "string"
+}
+
 
 variable "region" {
   type    = "string"
