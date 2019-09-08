@@ -7,6 +7,10 @@ variable "gcp_creds" {
   type    = "string"
 }
 
+variable "env" {
+  
+}
+
 
 variable "region" {
   type    = "string"
