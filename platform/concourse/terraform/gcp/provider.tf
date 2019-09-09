@@ -11,7 +11,7 @@ terraform {
   # required_version = ">= 0.12.0"
   backend "gcs" {
   bucket  = "bzhtux-tf-state"
-  prefix  = "concourse/gcp/terraform.tfstate"
+  prefix  = "concourse/gcp"
   credentials = "/Users/yfoeillet/workdir/creds/gcp/terraform/cso-pcfs-emea-bzhtux-terraform-service-account.json"
   }
 }
