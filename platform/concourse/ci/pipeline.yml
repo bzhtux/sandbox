@@ -103,10 +103,14 @@ jobs:
       get_params:
         action: destroy
 
-- name: deploy-bosh
+- name: BOSH
   plan:
   - in_parallel:
     - get: ci-repo
     - get: terraform
       trigger: true
       passed: [terraform-apply]
+    - task: deploy
+      image: ci-image
+      file: "ci-repo/platform/concourse/ci/bosh.yml"
+        

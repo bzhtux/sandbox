@@ -1,0 +1,13 @@
+---
+platform: linux
+
+inputs:
+- name: ci-repo
+
+
+params:
+  CF_USERNAME:
+
+
+run:
+  path: "ci-repo/platform/concourse/concourse/ci/bosh.sh"
