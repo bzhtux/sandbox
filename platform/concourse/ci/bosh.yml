@@ -12,6 +12,5 @@ params:
 run:
   path: "sh"
   args:
-  # - "-l"
   - "-c"
-  - "ci/tasks/cf/elastic.sh"
+  - "ci-repo/platform/concourse/ci/bosh.sh"
