@@ -116,3 +116,4 @@ jobs:
     file: "ci-repo/platform/concourse/ci/bosh.yml"
     params:
       SSH_PRIV_KEY: ((ssh.priv_key))
+      SSH_USERNAME: ((ssh.user))
