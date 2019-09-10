@@ -1,3 +1,7 @@
+resource "google_compute_project_metadata_item" "ssh-keys" {
+  key   = "ssh-keys"
+  value = "${var.ssh_pub_key}"
+}
 resource "google_compute_instance" "jumpbox" {
   name          = "jbx"
   machine_type  = "${var.jbx_machine_type}"
@@ -20,9 +24,9 @@ resource "google_compute_instance" "jumpbox" {
     }
   }
 
-  metadata = {
-    sshKeys   = "${var.ssh_pub_key}"
-  }
+#   metadata = {
+#     # sshKeys   = "${var.ssh_pub_key}"
+#   }
 
   tags  = ["jbx-ssh"]
 
