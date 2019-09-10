@@ -70,3 +70,7 @@ variable "jbx_machine_type" {
 variable "ssh_pub_key" {
   type    = "string"
 }
+
+variable "ssh_user" {
+  type    = "string"
+}
