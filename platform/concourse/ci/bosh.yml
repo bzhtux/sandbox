@@ -6,7 +6,12 @@ inputs:
 
 
 params:
+  CF_USERNAME:
 
 
 run:
-  path: "ci-repo/platform/concourse/concourse/ci/bosh.sh"
+  path: "sh"
+  args:
+  # - "-l"
+  - "-c"
+  - "ci/tasks/cf/elastic.sh"
