@@ -107,10 +107,11 @@ jobs:
   plan:
   - in_parallel:
     - get: ci-repo
+    - get: ci-image
     - get: terraform
       trigger: true
       passed: [terraform-apply]
-    - task: deploy
-      image: ci-image
-      file: "ci-repo/platform/concourse/ci/bosh.yml"
+  - task: deploy
+    image: ci-image
+    file: "ci-repo/platform/concourse/ci/bosh.yml"
         

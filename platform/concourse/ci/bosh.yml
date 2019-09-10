@@ -6,7 +6,6 @@ inputs:
 
 
 params:
-  CF_USERNAME:
 
 
 run:
