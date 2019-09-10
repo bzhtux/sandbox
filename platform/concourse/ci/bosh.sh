@@ -2,4 +2,6 @@
 
 set -x
 
-echo $0
+
+ls -lR terraform/
+cat terraform/metadata
