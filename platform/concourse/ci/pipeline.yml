@@ -61,6 +61,7 @@ jobs:
       vars:
         gcp_creds: ((gcp.credentials))
         ssh_pub_key: ((ssh.pub_key))
+        ssh_user: ((ssh.user)) 
 
 - name: terraform-apply
   plan:
@@ -79,7 +80,8 @@ jobs:
           TF_LOG: DEBUG        
         vars:
           gcp_creds: ((gcp.credentials))   
-          ssh_pub_key: ((ssh.pub_key))  
+          ssh_pub_key: ((ssh.pub_key)) 
+          ssh_user: ((ssh.user)) 
    
 
 - name: terraform-destroy
