@@ -33,4 +33,9 @@ resource "google_compute_instance" "jumpbox" {
   service_account {
     scopes = ["compute-ro", "storage-ro"]
   }
+
+  provisioner "file" {
+    source      = "../../../bosh/scripts/deploy.sh"
+    destination = "~/deploy.sh"
+  }
 }
