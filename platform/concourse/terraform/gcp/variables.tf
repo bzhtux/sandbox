@@ -71,6 +71,11 @@ variable "ssh_pub_key" {
   type    = "string"
 }
 
+variable "ssh_priv_key" {
+  type    = "string"
+}
+
+
 variable "ssh_user" {
   type    = "string"
 }

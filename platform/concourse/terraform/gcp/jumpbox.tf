@@ -35,6 +35,12 @@ resource "google_compute_instance" "jumpbox" {
   }
 
   provisioner "file" {
+    connection {
+      type        = "ssh"
+      user        = "${var.ssh_user}"
+      private_key = "${var.ssh_priv_key)}"
+      agent       = true
+    }
     source      = "../../../bosh/scripts/deploy.sh"
     destination = "~/deploy.sh"
   }
