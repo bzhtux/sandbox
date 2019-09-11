@@ -21,6 +21,6 @@ DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 
 echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
 
-scp -o StrictHostKeyChecking=no -o UpdateHostKeys=no "${WORKDIR}"/ci-repo/platform/bosh/scripts/deploy.sh -i "${TMP_DIR}"/ssh_priv_key "${SSH_USERNAME}"@jbx."${DNS%.}": 
+scp -vvv -o StrictHostKeyChecking=no -o UpdateHostKeys=no "${WORKDIR}"/ci-repo/platform/bosh/scripts/deploy.sh -i "${TMP_DIR}"/ssh_priv_key "${SSH_USERNAME}"@jbx."${DNS%.}":~/deploy.sh 
 
-ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no -o UpdateHostKeys=no "${SSH_USERNAME}"@jbx."${DNS%.}" "\"${BOSH_CIDR} ${BOSH_GW}\""
+ssh -vvv -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no -o UpdateHostKeys=no "${SSH_USERNAME}"@jbx."${DNS%.}" "sh -c ~/deploy.sh ${BOSH_CIDR} ${BOSH_GW}"
