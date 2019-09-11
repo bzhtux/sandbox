@@ -20,6 +20,7 @@ BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 
 echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
+chmod 0400 "${TMP_DIR}"/ssh_priv_key
 
 scp -vvv -o StrictHostKeyChecking=no -o UpdateHostKeys=no "${WORKDIR}"/ci-repo/platform/bosh/scripts/deploy.sh -i "${TMP_DIR}"/ssh_priv_key "${SSH_USERNAME}"@jbx."${DNS%.}":~/deploy.sh 
 
