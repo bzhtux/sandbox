@@ -59,4 +59,18 @@ resource "google_compute_instance" "jumpbox" {
     ]
   }
 
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      host        = "${google_compute_address.jumpbox-ip.address}"
+      user        = "${var.ssh_user}"
+      private_key = "${var.ssh_priv_key}"
+      agent       = false
+    }
+    inline = [
+      "apt update",
+      "apt install -y jq git curl"
+    ]
+  }
+
 }

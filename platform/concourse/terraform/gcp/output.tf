@@ -13,6 +13,11 @@ output "network_name" {
   value = "${google_compute_network.concourse.name}"
 }
 
+output "bosh_subnet" {
+  value = "${google_compute_subnetwork.bosh.name}"
+}
+
+
 output "gcp_json" {
   value = "${var.gcp_creds}"
 }
