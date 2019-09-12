@@ -26,5 +26,5 @@ ssh -i "${TMP_DIR}"/ssh_priv_key -vvv \
 -o UpdateHostKeys=no \
 "${SSH_USERNAME}"@jbx."${DNS%.}" \
 "BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata) \
-BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)\
+BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata) \
 /home/${SSH_USERNAME}/deploy.sh"
