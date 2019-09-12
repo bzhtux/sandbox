@@ -8,3 +8,7 @@ output "bosh_gw" {
 output "dns" {
   value = "${var.dns_zone}.${var.dns_name}"
 }
+
+output "network_name" {
+  value = "${google_compute_network.concourse}"
+}
