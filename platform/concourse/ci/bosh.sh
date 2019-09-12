@@ -18,11 +18,11 @@ echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
 chmod 0400 "${TMP_DIR}"/ssh_priv_key
 
 # scp -i "${TMP_DIR}"/ssh_priv_key -vvv -o StrictHostKeyChecking=no "${WORKDIR}"/terraform/metadata "${SSH_USERNAME}"@jbx."${DNS%.}":~/tf_metadata 
+DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 
 cat >"${TMP_DIR}"/env_vars <<EOF
 export BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
 export BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
-export DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 EOF
 
 # shellcheck disable=SC2002
