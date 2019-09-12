@@ -39,7 +39,7 @@ then
   fi
 else
   echo -e "${YELLOW}--- BOSH is not installed (no .boshrc file is present)${EOC}"
-  installBosh
+#   installBosh
   TASKS="install deploy"
 fi
 
