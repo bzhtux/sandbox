@@ -10,5 +10,9 @@ output "dns" {
 }
 
 output "network_name" {
-  value = "${google_compute_network.concourse}"
+  value = "${google_compute_network.concourse.name}"
+}
+
+output "gcp_json" {
+  value = "${var.gcp_creds}"
 }
