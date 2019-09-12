@@ -47,7 +47,7 @@ else
   TASKS="install deploy"
 fi
 
-set -euo pipefail
+set -xeuo pipefail
 
 installBosh() {
   if [ ! -x "/usr/local/bin/bosh" ]
@@ -64,7 +64,8 @@ deployBosh() {
   echo "+++ WIP: Deploy bosh "
   git clone "$BOSH_GIT_URL" "${TMP_DIR}"/bosh
   cd "${TMP_DIR}"
-  BOSH_IP=$(echo ${BOSH_GW} | sed -e "s/\.1$/\.10$/g")
+#   BOSH_IP=$(echo "${BOSH_GW}" | sed -e "s/\.1$/\.10$/g")
+  BOSH_IP=${BOSH_GW//\.1$/\.10$}
   bosh create-env "bosh/bosh.yml" \
     --state "${PWD}/state.json" \
     --ops-file "bosh/gcp/cpi.yml" \
