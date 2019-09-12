@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
 WORKDIR=$PWD
 BOSH_VERSION="6.0.0"
