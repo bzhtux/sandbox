@@ -68,8 +68,8 @@ resource "google_compute_instance" "jumpbox" {
       agent       = false
     }
     inline = [
-      "apt update",
-      "apt install -y jq git curl"
+      "sudo apt update",
+      "sudo apt install -y jq git curl"
     ]
   }
 
