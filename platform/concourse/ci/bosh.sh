@@ -8,7 +8,7 @@ BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
 BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
 BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
-BOSH_IP=${BOSH_GW//\.1$/\.10$}
+BOSH_IP=${BOSH_GW//\.1/\.10}
 
 
 
