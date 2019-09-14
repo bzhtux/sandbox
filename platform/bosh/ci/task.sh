@@ -51,5 +51,5 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var network="${NET_NAME}" \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
---var tags=["bosh", "nat"] \
+--var tags=["bosh"] \
 --var zone="europe-west1-c"
