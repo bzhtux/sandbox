@@ -121,3 +121,33 @@ jobs:
     params:
       SSH_PRIV_KEY: ((ssh.priv_key))
       SSH_USERNAME: ((ssh.user))
+
+- name: CREDHUB
+  plan:
+  - in_parallel:
+    - get: ci-repo
+    - get: ci-image
+    - get: terraform
+      trigger: true
+      passed: [BOSH]
+  - task: deploy
+    image: ci-image
+    file: "ci-repo/platform/credhub/ci/task.yml"
+    params:
+      SSH_PRIV_KEY: ((ssh.priv_key))
+      SSH_USERNAME: ((ssh.user))
+
+- name: CONCOURSE
+  plan:
+  - in_parallel:
+    - get: ci-repo
+    - get: ci-image
+    - get: terraform
+      trigger: true
+      passed: [CREDHUB]
+  - task: deploy
+    image: ci-image
+    file: "ci-repo/platform/concourse/ci/task.yml"
+    params:
+      SSH_PRIV_KEY: ((ssh.priv_key))
+      SSH_USERNAME: ((ssh.user))      

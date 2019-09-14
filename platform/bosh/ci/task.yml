@@ -5,11 +5,12 @@ inputs:
 - name: ci-repo
 - name: terraform
 
-
 params:
   SSH_PRIV_KEY:
   SSH_USERNAME:
 
+caches:
+- path: ~/.bosh
 
 run:
   path: "sh"
