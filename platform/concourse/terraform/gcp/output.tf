@@ -17,6 +17,9 @@ output "bosh_subnet" {
   value = "${google_compute_subnetwork.bosh.name}"
 }
 
+# output "jbx-tags" {
+#   value = "value"
+# }
 
 output "gcp_json" {
   value = "${var.gcp_creds}"
