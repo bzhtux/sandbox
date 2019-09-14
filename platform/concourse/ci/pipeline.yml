@@ -117,7 +117,7 @@ jobs:
       passed: [terraform-apply]
   - task: deploy
     image: ci-image
-    file: "ci-repo/platform/concourse/ci/bosh.yml"
+    file: "ci-repo/platform/bosh/ci/task.yml"
     params:
       SSH_PRIV_KEY: ((ssh.priv_key))
       SSH_USERNAME: ((ssh.user))

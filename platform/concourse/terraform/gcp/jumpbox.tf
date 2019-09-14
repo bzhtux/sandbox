@@ -34,43 +34,43 @@ resource "google_compute_instance" "jumpbox" {
     scopes = ["compute-ro", "storage-ro"]
   }
 
-  provisioner "file" {
-    connection {
-      type        = "ssh"
-      host        = "${google_compute_address.jumpbox-ip.address}"
-      user        = "${var.ssh_user}"
-      private_key = "${var.ssh_priv_key}"
-      agent       = false
-    }
-    source      = "../../../bosh/scripts/deploy.sh"
-    destination = "~/deploy.sh"
-  }
+  # provisioner "file" {
+  #   connection {
+  #     type        = "ssh"
+  #     host        = "${google_compute_address.jumpbox-ip.address}"
+  #     user        = "${var.ssh_user}"
+  #     private_key = "${var.ssh_priv_key}"
+  #     agent       = false
+  #   }
+  #   source      = "../../../bosh/scripts/deploy.sh"
+  #   destination = "~/deploy.sh"
+  # }
 
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      host        = "${google_compute_address.jumpbox-ip.address}"
-      user        = "${var.ssh_user}"
-      private_key = "${var.ssh_priv_key}"
-      agent       = false
-    }
-    inline = [
-      "chmod +x deploy.sh"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   connection {
+  #     type        = "ssh"
+  #     host        = "${google_compute_address.jumpbox-ip.address}"
+  #     user        = "${var.ssh_user}"
+  #     private_key = "${var.ssh_priv_key}"
+  #     agent       = false
+  #   }
+  #   inline = [
+  #     "chmod +x deploy.sh"
+  #   ]
+  # }
 
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      host        = "${google_compute_address.jumpbox-ip.address}"
-      user        = "${var.ssh_user}"
-      private_key = "${var.ssh_priv_key}"
-      agent       = false
-    }
-    inline = [
-      "sudo apt update",
-      "sudo apt install -y jq git curl"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   connection {
+  #     type        = "ssh"
+  #     host        = "${google_compute_address.jumpbox-ip.address}"
+  #     user        = "${var.ssh_user}"
+  #     private_key = "${var.ssh_priv_key}"
+  #     agent       = false
+  #   }
+  #   inline = [
+  #     "sudo apt update",
+  #     "sudo apt install -y jq git curl"
+  #   ]
+  # }
 
 }
