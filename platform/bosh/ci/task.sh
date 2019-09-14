@@ -56,4 +56,5 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
 --var tags=["bosh"] \
---var zone="europe-west1-c"
+--var zone="europe-west1-c" \
+--var-env GOCACHE=/root/.cache/go-build
