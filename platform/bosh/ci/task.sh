@@ -35,6 +35,10 @@ export BOSH_ALL_PROXY="ssh+socks5://${SSH_USERNAME}@jbx.${DNS%.}:22?private-key=
 # GIT clone bosh-deployment sources
 git clone "${BOSH_GIT_URL}" "${TMP_DIR}"/bosh
 
+# GOBUILDCACHE
+mkdir -p ~/.cache/go-build
+export GOCACHE=~/.cache/go-build
+
 # BOSH create env
 bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --state "${PWD}/state.json" \
