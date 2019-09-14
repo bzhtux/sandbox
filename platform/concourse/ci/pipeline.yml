@@ -4,13 +4,13 @@ anchors:
     on_failure:
       do:
       - put: notify
-        inputs: ['ci-repo', 'ci-image', 'gcp-creds']
+        inputs: ['ci-repo']
         params:
           alert_type: failed
     on_error:
       do:
       - put: notify
-        inputs: ['ci-repo', 'ci-image', 'gcp-creds']
+        inputs: ['ci-repo']
         params:
           alert_type: failed
 
