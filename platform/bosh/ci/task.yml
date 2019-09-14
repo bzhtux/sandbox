@@ -10,7 +10,7 @@ params:
   SSH_USERNAME:
 
 caches:
-- path: ~/.bosh
+- path: /root/.bosh
 
 run:
   path: "sh"
