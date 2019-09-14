@@ -13,7 +13,7 @@ BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
 DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
-PROJECT_ID=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata | jq -r .project_id)
+PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
 
 
 # tearDown
