@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 WORKDIR=$PWD
 TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
 BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
@@ -8,7 +10,7 @@ BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 BOSH_IP=${BOSH_GW//\.1$/\.10$}
 
-set -x
+
 
 tearDown(){
     if [ -d "${TMP_DIR}" ]
