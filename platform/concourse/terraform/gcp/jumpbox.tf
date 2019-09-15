@@ -28,7 +28,7 @@ resource "google_compute_instance" "jumpbox" {
     sshKeys = "${var.ssh_user}:${var.ssh_pub_key}"
   }
 
-  tags  = ["jbx-ssh"]
+  tags  = ["ssh"]
 
   service_account {
     scopes = ["compute-ro", "storage-ro"]
