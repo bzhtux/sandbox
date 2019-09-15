@@ -27,7 +27,7 @@ tearDown(){
 
 trap tearDown EXIT
 
-echo "$CREDS" |jq
+echo "$CREDS" > "${TMP_DIR}"/gcp_creds.json
 
 # BOSH TUNNELING
 echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
@@ -53,7 +53,7 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var internal_ip="${BOSH_IP}" \
 --var internal_gw="${BOSH_GW}" \
 --var internal_cidr="${BOSH_CIDR}" \
---var gcp_credentials_json="${CREDS}" \
+--var-file gcp_credentials_json="${TMP_DIR}/gcp_creds.json" \
 --var network="${NET_NAME}" \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
