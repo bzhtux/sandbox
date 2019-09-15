@@ -60,3 +60,12 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var tags=["bosh", "ssh"] \
 --var zone="europe-west1-c" \
 --vars-env GOCACHE=/tmp/.cache/go-build
+
+cat > boshrc <<EOF
+export BOSH_CA_CERT=$(bosh int "${PWD}/creds.yml" --path /director_ssl/ca)
+export BOSH_CLIENT=admin
+export BOSH_CLIENT_SECRET=$(bosh int "${PWD}/creds.yml" --path /admin_password)
+export BOSH_ENVIRONMENT=${BOSH_IP}
+EOF
+
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc
