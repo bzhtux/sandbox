@@ -52,6 +52,7 @@ resources:
   type: docker-image
   source: 
     repository: bzhtux/pivotal
+    tag: debian
   icon: docker
 
 - name: terraform

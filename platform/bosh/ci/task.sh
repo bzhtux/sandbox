@@ -11,7 +11,7 @@ BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 BOSH_IP="${BOSH_GW%.1}.10"
 BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
 DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
-CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)
+CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata |jq)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
 
@@ -26,6 +26,7 @@ tearDown(){
 
 trap tearDown EXIT
 
+echo "$CREDS" |jq
 
 # BOSH TUNNELING
 echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
@@ -36,11 +37,11 @@ export BOSH_ALL_PROXY="ssh+socks5://${SSH_USERNAME}@jbx.${DNS%.}:22?private-key=
 git clone "${BOSH_GIT_URL}" "${TMP_DIR}"/bosh
 
 # GOBUILDCACHE
-mkdir -p /root/.cache/go-build
-export GOCACHE=/root/.cache/go-build
+mkdir -p /tmp/.cache/go-build
+export GOCACHE=/tmp/.cache/go-build
 
 # BOSH create env
-bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
+GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --state "${PWD}/state.json" \
 --ops-file "${TMP_DIR}/bosh/gcp/cpi.yml" \
 --ops-file "${TMP_DIR}/bosh/uaa.yml" \
@@ -57,4 +58,4 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var subnetwork="${BOSH_SUBNET}" \
 --var tags=["bosh"] \
 --var zone="europe-west1-c" \
---vars-env GOCACHE=/root/.cache/go-build
+--vars-env GOCACHE=/tmp/.cache/go-build
