@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+set -xeuo pipefail
 
 # VARIABLES
 WORKDIR=$PWD
@@ -43,12 +43,12 @@ export GOCACHE=/tmp/.cache/go-build
 
 # BOSH create env
 GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
---state "${PWD}/state.json" \
+--state "${WORKDIR}/state.json" \
 --ops-file "${TMP_DIR}/bosh/gcp/cpi.yml" \
 --ops-file "${TMP_DIR}/bosh/uaa.yml" \
 --ops-file "${TMP_DIR}/bosh/credhub.yml" \
 --ops-file "${TMP_DIR}/bosh/jumpbox-user.yml" \
---vars-store "${PWD}/creds.yml" \
+--vars-store "${WORKDIR}/creds.yml" \
 --var director_name=bosh \
 --var internal_ip="${BOSH_IP}" \
 --var internal_gw="${BOSH_GW}" \
@@ -57,14 +57,14 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var network="${NET_NAME}" \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
---var tags=["bosh", "ssh"] \
+--var tags=[bosh, ssh] \
 --var zone="europe-west1-c" \
 --vars-env GOCACHE=/tmp/.cache/go-build
 
 cat > boshrc <<EOF
-export BOSH_CA_CERT=$(bosh int "${PWD}/creds.yml" --path /director_ssl/ca)
+export BOSH_CA_CERT=$(bosh int "${WORKDIR}/creds.yml" --path /director_ssl/ca)
 export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=$(bosh int "${PWD}/creds.yml" --path /admin_password)
+export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/creds.yml" --path /admin_password)
 export BOSH_ENVIRONMENT=${BOSH_IP}
 EOF
 
