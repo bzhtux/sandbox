@@ -28,7 +28,7 @@ allow {
 
 allow {
   protocol    = "tcp"
-  ports       = ["6868"]
+  ports       = ["6868","25555"]
 }
 
 source_ranges = ["0.0.0.0/0"]
