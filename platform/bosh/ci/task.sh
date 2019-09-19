@@ -53,6 +53,8 @@ fi
 
 if bosh env
 then
+  echo > "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json"
+  echo > "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml"
   exit 0
 fi
 

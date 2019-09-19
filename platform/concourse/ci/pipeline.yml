@@ -202,8 +202,12 @@ jobs:
     <<: *notify-slack
   - put: bosh-states
     inputs: [bosh-state]
+    params:
+      file: state-(.*).json
   - put: bosh-creds
     inputs: [bosh-creds]
+    params:
+      file: creds-(.*).yml
 
 - name: configure-UAA
   plan:
