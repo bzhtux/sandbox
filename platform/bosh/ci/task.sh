@@ -15,7 +15,7 @@ DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
-
+TIMESTAMP=$(date +%s)
 
 # tearDown
 tearDown(){
@@ -41,14 +41,31 @@ git clone "${BOSH_GIT_URL}" "${TMP_DIR}"/bosh
 mkdir -p /tmp/.cache/go-build
 export GOCACHE=/tmp/.cache/go-build
 
+set +euo pipefail
+
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc "${TMP_DIR}"/boshrc
+
+if [ -f "${TMP_DIR}/boshrc" ]
+then
+  # shellcheck source=/dev/null
+  . "${TMP_DIR}/boshrc"
+fi
+
+if bosh env
+then
+  exit 0
+fi
+
+set -euo pipefail
+
 # BOSH create env
 GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
---state "${WORKDIR}/state.json" \
+--state "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json" \
 --ops-file "${TMP_DIR}/bosh/gcp/cpi.yml" \
 --ops-file "${TMP_DIR}/bosh/uaa.yml" \
 --ops-file "${TMP_DIR}/bosh/credhub.yml" \
 --ops-file "${TMP_DIR}/bosh/jumpbox-user.yml" \
---vars-store "${WORKDIR}/creds.yml" \
+--vars-store "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" \
 --var director_name=bosh \
 --var internal_ip="${BOSH_IP}" \
 --var internal_gw="${BOSH_GW}" \
@@ -62,7 +79,7 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --vars-env GOCACHE=/tmp/.cache/go-build
 
 cat > boshrc <<EOF
-export BOSH_CA_CERT=$(bosh int "${WORKDIR}/creds.yml" --path /director_ssl/ca)
+export BOSH_CA_CERT="$(bosh int "${WORKDIR}/creds.yml" --path /director_ssl/ca)"
 export BOSH_CLIENT=admin
 export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/creds.yml" --path /admin_password)
 export BOSH_ENVIRONMENT=${BOSH_IP}

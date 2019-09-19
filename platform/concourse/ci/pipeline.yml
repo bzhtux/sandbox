@@ -14,6 +14,30 @@ anchors:
         params:
           alert_type: failed
 
+groups:
+- name: full
+  jobs:
+  - terraform-plan
+  - terraform-apply
+  - BOSH
+  - terraform-destroy
+  - configure-UAA
+  - BOSH-delete-env
+  - CREDHUB
+  - CONCOURSE
+- name: deploy
+  jobs:
+  - terraform-plan
+  - terraform-apply
+  - BOSH
+  - configure-UAA
+  - CREDHUB
+  - CONCOURSE
+- name: delete
+  jobs:
+  - terraform-destroy
+  - BOSH-delete-env     
+
 resource_types:
 - name: terraform
   type: docker-image
@@ -71,7 +95,23 @@ resources:
       bucket: gcp-creds
       regexp: concourse-(.*).json
       json_key: ((gcp.credentials))
-  icon: github-circle
+  icon: harddisk
+
+- name: bosh-states
+  type: gcs
+  source:
+      bucket: bosh-states
+      regexp: mgmt/((cp))/state-(.*).json
+      json_key: ((gcp.credentials))
+  icon: harddisk
+
+- name: bosh-creds
+  type: gcs
+  source:
+      bucket: bosh-creds
+      regexp: mgmt/((cp))/creds-(.*).json
+      json_key: ((gcp.credentials))
+  icon: harddisk
 
 jobs:
 - name: terraform-plan
@@ -160,6 +200,24 @@ jobs:
       SSH_PRIV_KEY: ((ssh.priv_key))
       SSH_USERNAME: ((ssh.user))
     <<: *notify-slack
+  - put: bosh-states
+    inputs: [bosh-state]
+  - put: bosh-creds
+    inputs: [bosh-creds]
+
+- name: configure-UAA
+  plan:
+  - in_parallel:
+    - get: ci-repo
+      <<: *notify-slack
+    - get: ci-image
+      <<: *notify-slack
+    - get: terraform
+      trigger: true
+      passed: [BOSH]      
+  - task: configure uaa for credhub deployment
+    image: ci-image
+    file: "ci-repo/platform/uaa/ci/credhub.yml"
 
 - name: BOSH-delete-env
   plan:
@@ -170,7 +228,7 @@ jobs:
       <<: *notify-slack
     - get: terraform
       trigger: true
-      passed: [terraform-apply]
+      passed: [BOSH]
   - task: deploy
     image: ci-image
     file: "ci-repo/platform/bosh/ci/delete.yml"
@@ -188,7 +246,7 @@ jobs:
       <<: *notify-slack
     - get: terraform
       trigger: true
-      passed: [BOSH]
+      passed: [configure-UAA]
   - task: deploy
     image: ci-image
     file: "ci-repo/platform/credhub/ci/task.yml"
