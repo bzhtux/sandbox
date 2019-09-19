@@ -203,11 +203,11 @@ jobs:
   - put: bosh-states
     inputs: [bosh-state]
     params:
-      file: bosh-state/state-(.*).json
+      file: bosh-state/state-*.json
   - put: bosh-creds
     inputs: [bosh-creds]
     params:
-      file: bosh-creds/creds-(.*).yml
+      file: bosh-creds/creds-*.yml
 
 - name: configure-UAA
   plan:
