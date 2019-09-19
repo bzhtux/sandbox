@@ -161,6 +161,24 @@ jobs:
       SSH_USERNAME: ((ssh.user))
     <<: *notify-slack
 
+- name: BOSH-delete-env
+  plan:
+  - in_parallel:
+    - get: ci-repo
+      <<: *notify-slack
+    - get: ci-image
+      <<: *notify-slack
+    - get: terraform
+      trigger: true
+      passed: [terraform-apply]
+  - task: deploy
+    image: ci-image
+    file: "ci-repo/platform/bosh/ci/delete.yml"
+    params:
+      SSH_PRIV_KEY: ((ssh.priv_key))
+      SSH_USERNAME: ((ssh.user))
+    <<: *notify-slack
+
 - name: CREDHUB
   plan:
   - in_parallel:
