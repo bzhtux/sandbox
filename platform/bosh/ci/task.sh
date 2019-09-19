@@ -51,7 +51,7 @@ then
   . "${TMP_DIR}/boshrc"
 fi
 
-if bosh env
+if timeout 5 bosh env
 then
   echo > "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json"
   echo > "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml"
