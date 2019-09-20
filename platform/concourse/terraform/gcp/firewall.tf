@@ -1,5 +1,5 @@
 resource "google_compute_firewall" "ssh" {
-  name          = "jbx-ssh"
+  name          = "${var.env_name}-ssh"
   network       = "${google_compute_network.concourse.name}"
   target_tags   = ["ssh"]
   priority      = 900
@@ -16,10 +16,10 @@ allow {
 source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_compute_firewall" "bosh-agent" {
-  name          = "bosh-agent"
+resource "google_compute_firewall" "bosh" {
+  name          = "${var.env_name}-bosh"
   network       = "${google_compute_network.concourse.name}"
-  target_tags   = ["bosh-agent"]
+  target_tags   = ["bosh"]
   priority      = 900
 
 allow {

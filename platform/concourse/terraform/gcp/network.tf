@@ -1,10 +1,10 @@
 resource "google_compute_network" "concourse" {
-  name                    = "${var.network}"
+  name                    = "${var.env_name}-${var.network}"
   auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "jumpbox" {
-  name                     = "${var.jbx_subnet}"
+  name                     = "${var.env_name}-${var.jbx_subnet}"
   ip_cidr_range            = "${var.jbx_subnet_cidr}"
   network                  = "${google_compute_network.concourse.self_link}"
   region                   = "${var.region}"
@@ -12,7 +12,7 @@ resource "google_compute_subnetwork" "jumpbox" {
 }
 
 resource "google_compute_subnetwork" "bosh" {
-  name                     = "${var.bosh_subnet}"
+  name                     = "${var.env_name}-${var.bosh_subnet}"
   ip_cidr_range            = "${var.bosh_subnet_cidr}"
   network                  = "${google_compute_network.concourse.self_link}"
   region                   = "${var.region}"
@@ -20,7 +20,7 @@ resource "google_compute_subnetwork" "bosh" {
 }
 
 resource "google_compute_subnetwork" "concourse" {
-  name                     = "${var.concourse_subnet}"
+  name                     = "${var.env_name}-${var.concourse_subnet}"
   ip_cidr_range            = "${var.concourse_subnet_cidr}"
   network                  = "${google_compute_network.concourse.self_link}"
   region                   = "${var.region}"
@@ -28,7 +28,7 @@ resource "google_compute_subnetwork" "concourse" {
 }
 
 resource "google_compute_router" "nat-router" {
-  name    = "nat-router"
+  name    = "${var.env_name}-nat-router"
   region  = "${var.region}"
   network = "${google_compute_network.concourse.self_link}"
 
@@ -38,12 +38,12 @@ resource "google_compute_router" "nat-router" {
 }
 
 resource "google_compute_address" "nat-address" {
-  name   = "concourse-nat-addr"
+  name   = "${var.env_name}-concourse-nat-addr"
   region = "${var.region}"
 }
 
 resource "google_compute_router_nat" "advanced-nat" {
-  name                               = "ci-pivotal-nat"
+  name                               = "${var.env_name}-ci-pivotal-nat"
   router                             = "${google_compute_router.nat-router.name}"
   region                             = "${var.region}"
   nat_ip_allocate_option             = "MANUAL_ONLY"

@@ -3,7 +3,7 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
   value = "${var.ssh_pub_key}"
 }
 resource "google_compute_instance" "jumpbox" {
-  name          = "jbx"
+  name          = "${var.env_name}-jbx"
   machine_type  = "${var.jbx_machine_type}"
   zone          = "${var.region}-c"
 
