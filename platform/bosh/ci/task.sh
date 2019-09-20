@@ -58,7 +58,7 @@ then
   exit 0
 fi
 
-set -euo pipefail
+set -xeuo pipefail
 
 # BOSH create env
 GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
@@ -76,7 +76,7 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var network="${NET_NAME}" \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
---var tags=[bosh-agent,ssh] \
+--var tags=[bosh,ssh] \
 --var zone="europe-west1-c" \
 --vars-env GOCACHE=/tmp/.cache/go-build
 
