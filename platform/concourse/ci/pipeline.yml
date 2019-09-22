@@ -85,7 +85,7 @@ resources:
     backend_type: gcs
     backend_config:
       bucket: bzhtux-tf-state
-      prefix: concourse/((cp))
+      prefix: concourse/((iaas))
       credentials: ((gcp.credentials))
   icon: docker
 
@@ -101,7 +101,7 @@ resources:
   type: gcs
   source:
       bucket: bosh-states
-      regexp: mgmt/((cp))/state-(.*).json
+      regexp: mgmt/((iaas))/state-(.*).json
       json_key: ((gcp.credentials))
   icon: harddisk
 
@@ -109,7 +109,7 @@ resources:
   type: gcs
   source:
       bucket: bosh-creds
-      regexp: mgmt/((cp))/creds-(.*).json
+      regexp: mgmt/((iaas))/creds-(.*).json
       json_key: ((gcp.credentials))
   icon: harddisk
 
@@ -125,9 +125,9 @@ jobs:
       <<: *notify-slack
   - put: terraform
     params:
-      env_name: ((cp))
+      env_name: ((iaas))
       plan_only: true
-      terraform_source: ci-repo/platform/concourse/terraform/((cp))
+      terraform_source: ci-repo/platform/concourse/terraform/((iaas))
       vars:
         gcp_creds: ((gcp.credentials))
         ssh_pub_key: ((ssh.pub_key))
@@ -148,9 +148,9 @@ jobs:
       passed: [terraform-plan]
     - put: terraform
       params:
-        env_name: ((cp))
+        env_name: ((iaas))
         plan_run: true
-        terraform_source: ci-repo/platform/concourse/terraform/((cp))
+        terraform_source: ci-repo/platform/concourse/terraform/((iaas))
         env:
           TF_LOG: DEBUG        
         vars:
@@ -170,8 +170,8 @@ jobs:
     - put: terraform
       params:
         action: destroy
-        env_name: ((cp))          
-        terraform_source: ci-repo/platform/concourse/terraform/((cp))
+        env_name: ((iaas))          
+        terraform_source: ci-repo/platform/concourse/terraform/((iaas))
         env:
           TF_LOG: DEBUG                  
         vars:

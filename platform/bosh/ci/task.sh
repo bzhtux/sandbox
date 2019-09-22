@@ -81,10 +81,21 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --vars-env GOCACHE=/tmp/.cache/go-build
 
 cat > boshrc <<EOF
-export BOSH_CA_CERT="$(bosh int "${WORKDIR}/creds.yml" --path /director_ssl/ca)"
+export BOSH_CA_CERT="$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)"
 export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/creds.yml" --path /admin_password)
+export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
 export BOSH_ENVIRONMENT=${BOSH_IP}
 EOF
 
+cat > "${TMP_DIR}"/install_bosh_cli.sh <<EOF
+BOSH_VERSION="6.0.0"
+curl -L "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64" -o /tmp/bosh
+chmod +x /tmp/bosh 
+sudo mv /tmp/bosh /usr/local/bin/
+EOF
+
+chmod +x "${TMP_DIR}"/install_bosh_cli.sh
+
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/install_bosh_cli.sh "${SSH_USERNAME}@jbx.${DNS%.}":/tmp/install_bosh_cli.sh
+ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}" /tmp/install_bosh_cli.sh
