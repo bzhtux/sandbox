@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Generate BOSH create env shell script
+cat > "${TMP_DIR}"/bosh.sh <<EOF
+#!/usr/bin/env bash
+
 set -xeuo pipefail
 
 # VARIABLES
@@ -60,8 +64,7 @@ fi
 
 set -xeuo pipefail
 
-# BOSH create env
-GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
+bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --state "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json" \
 --ops-file "${TMP_DIR}/bosh/gcp/cpi.yml" \
 --ops-file "${TMP_DIR}/bosh/uaa.yml" \
@@ -80,22 +83,23 @@ GOCACHE=/tmp/.cache/go-build bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var zone="europe-west1-c" \
 --vars-env GOCACHE=/tmp/.cache/go-build
 
-cat > boshrc <<EOF
+cat > ~/.boshrc <<EOIF
 export BOSH_CA_CERT="$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)"
 export BOSH_CLIENT=admin
 export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
 export BOSH_ENVIRONMENT=${BOSH_IP}
-EOF
+EOIF
 
-cat > "${TMP_DIR}"/install_bosh_cli.sh <<EOF
 BOSH_VERSION="6.0.0"
 curl -L "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64" -o /tmp/bosh
 chmod +x /tmp/bosh 
 sudo mv /tmp/bosh /usr/local/bin/
+
 EOF
 
-chmod +x "${TMP_DIR}"/install_bosh_cli.sh
 
-scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc
-scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/install_bosh_cli.sh "${SSH_USERNAME}@jbx.${DNS%.}":/tmp/install_bosh_cli.sh
-ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}" /tmp/install_bosh_cli.sh
+chmod +x "${TMP_DIR}"/bosh.sh
+
+# scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/bosh.sh "${SSH_USERNAME}@jbx.${DNS%.}":~/bosh.sh
+ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}" ~/bosh.sh
