@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+WORKDIR=$PWD
 BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
 BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
@@ -37,7 +38,7 @@ tearDown(){
     fi
 }
 
-trap tearDown EXIT
+trap tearDown EXIT  
 
 echo "$CREDS" > "${TMP_DIR}"/gcp_creds.json
 
