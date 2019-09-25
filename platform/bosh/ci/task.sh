@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
+BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
+BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
+DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
+# CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)
+CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
+NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
+PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
+
 # Generate BOSH create env shell script
 cat > "${TMP_DIR}"/bosh.sh <<EOF
 #!/usr/bin/env bash
@@ -10,15 +19,14 @@ set -xeuo pipefail
 WORKDIR=$PWD
 TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
 BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
-BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
-BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
+BOSH_CIDR=${BOSH_CIDR}
+BOSH_GW=${BOSH_GW}
 BOSH_IP="${BOSH_GW%.1}.10"
-BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
-DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
-# CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)
-CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
-NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
-PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
+BOSH_SUBNET=${BOSH_SUBNET}
+DNS=${DNS}
+CREDS=${CREDS}
+NET_NAME=${NET_NAME}
+PROJECT_ID=${PROJECT_ID}
 TIMESTAMP=$(date +%s)
 
 # tearDown
