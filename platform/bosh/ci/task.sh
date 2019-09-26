@@ -15,6 +15,7 @@ PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
 BOSH_GIT_URL=""
 TIMESTAMP=""
 BOSH_IP=""
+BOSH_VERSION=""
 
 # tearDown
 tearDown(){

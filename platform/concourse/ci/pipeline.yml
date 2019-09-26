@@ -12,7 +12,7 @@ anchors:
       - put: notify
         inputs: ['ci-repo']
         params:
-          alert_type: failed
+          alert_type: failed          
 
 groups:
 - name: full
