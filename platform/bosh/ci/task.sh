@@ -12,10 +12,10 @@ CREDS="$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)"
 # CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
-BOSH_GIT_URL=""
-TIMESTAMP=""
-BOSH_IP=""
-BOSH_VERSION=""
+BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
+TIMESTAMP=$(date +%s)
+BOSH_IP="${BOSH_GW%.1}.10"
+BOSH_VERSION="6.0.0"
 
 # tearDown
 tearDown(){
