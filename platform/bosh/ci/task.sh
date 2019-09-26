@@ -62,6 +62,11 @@ trap tearDown EXIT
 
 # BOSH TUNNELING
 # export BOSH_ALL_PROXY="ssh+socks5://${SSH_USERNAME}@jbx.${DNS%.}:22?private-key=${TMP_DIR}/ssh_priv_key"
+BOSH_VERSION="6.0.0"
+curl -L "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64" -o /tmp/bosh
+chmod +x /tmp/bosh 
+sudo mv /tmp/bosh /usr/local/bin/
+
 
 # GIT clone bosh-deployment sources
 git clone "${BOSH_GIT_URL}" "${TMP_DIR}"/bosh
@@ -114,11 +119,6 @@ export BOSH_CLIENT=admin
 export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
 export BOSH_ENVIRONMENT=${BOSH_IP}
 EOIF
-
-BOSH_VERSION="6.0.0"
-curl -L "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64" -o /tmp/bosh
-chmod +x /tmp/bosh 
-sudo mv /tmp/bosh /usr/local/bin/
 
 EOF
 
