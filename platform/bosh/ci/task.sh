@@ -13,6 +13,7 @@ CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
 BOSH_GIT_URL=""
+TIMESTAMP=""
 
 # tearDown
 tearDown(){
