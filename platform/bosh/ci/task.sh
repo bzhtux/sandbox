@@ -8,8 +8,8 @@ BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
 BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
 DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
-# CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)
-CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
+CREDS=$(jq -r .gcp_json <"${WORKDIR}"/terraform/metadata)
+# CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
 BOSH_GIT_URL=""
@@ -37,7 +37,6 @@ cat > "${TMP_DIR}"/bosh.sh <<EOF
 set -xeuo pipefail
 
 # VARIABLES
-WORKDIR=$PWD
 TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
 BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
 BOSH_CIDR=${BOSH_CIDR}
