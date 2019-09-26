@@ -39,16 +39,16 @@ cat > "${TMP_DIR}"/bosh.sh <<EOF
 set -xeuo pipefail
 
 # VARIABLES
-TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
-BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
-BOSH_CIDR=${BOSH_CIDR}
-BOSH_GW=${BOSH_GW}
-BOSH_IP="${BOSH_GW%.1}.10"
-BOSH_SUBNET=${BOSH_SUBNET}
-DNS=${DNS}
-NET_NAME=${NET_NAME}
-PROJECT_ID=${PROJECT_ID}
-TIMESTAMP=$(date +%s)
+# TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
+# BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
+# BOSH_CIDR=${BOSH_CIDR}
+# BOSH_GW=${BOSH_GW}
+# BOSH_IP="${BOSH_GW%.1}.10"
+# BOSH_SUBNET=${BOSH_SUBNET}
+# DNS=${DNS}
+# NET_NAME=${NET_NAME}
+# PROJECT_ID=${PROJECT_ID}
+# TIMESTAMP=$(date +%s)
 
 # tearDown
 tearDown(){
@@ -66,6 +66,12 @@ BOSH_VERSION="6.0.0"
 curl -L "https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64" -o /tmp/bosh
 chmod +x /tmp/bosh 
 sudo mv /tmp/bosh /usr/local/bin/
+
+
+# APT
+apt install -y curl \
+golang-go \
+make 
 
 
 # GIT clone bosh-deployment sources
