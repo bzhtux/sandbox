@@ -14,6 +14,7 @@ NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
 BOSH_GIT_URL=""
 TIMESTAMP=""
+BOSH_IP=""
 
 # tearDown
 tearDown(){
