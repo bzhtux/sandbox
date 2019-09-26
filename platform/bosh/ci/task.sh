@@ -3,6 +3,7 @@
 set -xeuo pipefail
 
 WORKDIR=$PWD
+TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
 BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
 BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
 BOSH_SUBNET=$(jq -r .bosh_subnet <"${WORKDIR}"/terraform/metadata)
