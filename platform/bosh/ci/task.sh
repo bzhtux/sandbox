@@ -27,6 +27,9 @@ tearDown(){
 
 trap tearDown EXIT  
 
+echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
+chmod 0400 "${TMP_DIR}"/ssh_priv_key
+
 # Generate BOSH create env shell script
 cat > "${TMP_DIR}"/bosh.sh <<EOF
 #!/usr/bin/env bash
@@ -60,9 +63,7 @@ trap tearDown EXIT
 echo "$CREDS" > "${TMP_DIR}"/gcp_creds.json
 
 # BOSH TUNNELING
-echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
-chmod 0400 "${TMP_DIR}"/ssh_priv_key
-export BOSH_ALL_PROXY="ssh+socks5://${SSH_USERNAME}@jbx.${DNS%.}:22?private-key=${TMP_DIR}/ssh_priv_key"
+# export BOSH_ALL_PROXY="ssh+socks5://${SSH_USERNAME}@jbx.${DNS%.}:22?private-key=${TMP_DIR}/ssh_priv_key"
 
 # GIT clone bosh-deployment sources
 git clone "${BOSH_GIT_URL}" "${TMP_DIR}"/bosh
