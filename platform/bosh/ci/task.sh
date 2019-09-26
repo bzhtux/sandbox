@@ -69,7 +69,7 @@ sudo mv /tmp/bosh /usr/local/bin/
 
 
 # APT
-apt install -y curl \
+sudo apt install -y curl \
 golang-go \
 make 
 
@@ -134,3 +134,6 @@ chmod +x "${TMP_DIR}"/bosh.sh
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/gcp_creds.json "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/gcp_creds.json"
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/bosh.sh "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/bosh.sh"
 ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}" "/home/${SSH_USERNAME}/bosh.sh"
+
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}:${WORKDIR}/bosh-state/state-${TIMESTAMP}.json" "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json"
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}:${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml"
