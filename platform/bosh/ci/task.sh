@@ -12,6 +12,17 @@ DNS=$(jq -r .dns <"${WORKDIR}"/terraform/metadata)
 CREDS=$(bosh int "${WORKDIR}"/terraform/metadata --path /gcp_json)
 NET_NAME=$(jq -r .network_name <"${WORKDIR}"/terraform/metadata)
 PROJECT_ID=$(echo "$CREDS" | jq -r .project_id)
+BOSH_GIT_URL=""
+
+# tearDown
+tearDown(){
+    if [ -d "${TMP_DIR}" ]
+    then
+      rm -rf "${TMP_DIR}"
+    fi
+}
+
+trap tearDown EXIT  
 
 # Generate BOSH create env shell script
 cat > "${TMP_DIR}"/bosh.sh <<EOF
