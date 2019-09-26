@@ -71,7 +71,8 @@ sudo mv /tmp/bosh /usr/local/bin/
 # APT
 sudo apt install -y curl \
 golang-go \
-make 
+make \
+ruby
 
 
 # GIT clone bosh-deployment sources
