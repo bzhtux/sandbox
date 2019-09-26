@@ -127,5 +127,5 @@ EOF
 chmod +x "${TMP_DIR}"/bosh.sh
 
 # scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc
-scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/bosh.sh "${SSH_USERNAME}@jbx.${DNS%.}":~/bosh.sh
-ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}" ~/bosh.sh
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/bosh.sh "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/bosh.sh"
+ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}" "/home/${SSH_USERNAME}/bosh.sh"
