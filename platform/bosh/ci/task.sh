@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xeuo pipefail
+
 WORKDIR=$PWD
 BOSH_CIDR=$(jq -r .bosh_cidr <"${WORKDIR}"/terraform/metadata)
 BOSH_GW=$(jq -r .bosh_gw <"${WORKDIR}"/terraform/metadata)
@@ -56,7 +58,7 @@ export GOCACHE=/tmp/.cache/go-build
 
 set +euo pipefail
 
-scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc "${TMP_DIR}"/boshrc
+# scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc "${TMP_DIR}"/boshrc
 
 if [ -f "${TMP_DIR}/boshrc" ]
 then
