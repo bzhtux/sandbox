@@ -30,6 +30,8 @@ trap tearDown EXIT
 echo "${SSH_PRIV_KEY}" > "${TMP_DIR}"/ssh_priv_key
 chmod 0400 "${TMP_DIR}"/ssh_priv_key
 
+echo "${CREDS}" > "${TMP_DIR}"/gcp_creds.json
+
 # Generate BOSH create env shell script
 cat > "${TMP_DIR}"/bosh.sh <<EOF
 #!/usr/bin/env bash
@@ -44,7 +46,6 @@ BOSH_GW=${BOSH_GW}
 BOSH_IP="${BOSH_GW%.1}.10"
 BOSH_SUBNET=${BOSH_SUBNET}
 DNS=${DNS}
-CREDS=${CREDS}
 NET_NAME=${NET_NAME}
 PROJECT_ID=${PROJECT_ID}
 TIMESTAMP=$(date +%s)
@@ -58,8 +59,6 @@ tearDown(){
 }
 
 trap tearDown EXIT  
-
-echo "$CREDS" > "${TMP_DIR}"/gcp_creds.json
 
 # BOSH TUNNELING
 # export BOSH_ALL_PROXY="ssh+socks5://${SSH_USERNAME}@jbx.${DNS%.}:22?private-key=${TMP_DIR}/ssh_priv_key"
@@ -101,7 +100,7 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var internal_ip="${BOSH_IP}" \
 --var internal_gw="${BOSH_GW}" \
 --var internal_cidr="${BOSH_CIDR}" \
---var-file gcp_credentials_json="${TMP_DIR}/gcp_creds.json" \
+--var-file gcp_credentials_json="~/gcp_creds.json" \
 --var network="${NET_NAME}" \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
@@ -126,6 +125,6 @@ EOF
 
 chmod +x "${TMP_DIR}"/bosh.sh
 
-# scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no boshrc "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/gcp_creds.json "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/gcp_creds.json"
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/bosh.sh "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/bosh.sh"
 ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}" "/home/${SSH_USERNAME}/bosh.sh"
