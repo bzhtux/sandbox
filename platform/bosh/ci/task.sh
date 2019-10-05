@@ -16,6 +16,10 @@ BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
 TIMESTAMP=$(date +%s)
 BOSH_IP="${BOSH_GW%.1}.10"
 BOSH_VERSION="6.0.0"
+CREDS_FILE=$(ls -1 "${WORKDIR}/bosh-creds/")
+CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/${CREDS_FILE}" --path /director_ssl/ca)
+SECRET=$(bosh int "${WORKDIR}/bosh-creds/${CREDS_FILE}" --path /admin_password)
+
 
 # tearDown
 tearDown(){
@@ -118,7 +122,7 @@ if bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var tags=[bosh,ssh] \
 --var zone="europe-west1-c"
 then
-  CREDS_FILE=$(ls -1 "${WORKDIR}/bosh-creds/")
+  export CREDS_FILE=$(ls -1 "${WORKDIR}/bosh-creds/")
   export CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/${CREDS_FILE}" --path /director_ssl/ca)
   export SECRET=$(bosh int "${WORKDIR}/bosh-creds/${CREDS_FILE}" --path /admin_password)
   cat > ~/.boshrc <<EOIF
