@@ -4,6 +4,12 @@ platform: linux
 inputs:
 - name: ci-repo
 - name: terraform
+- name: state
+- name: creds
+
+outputs:
+- name: bosh-state
+- name: bosh-creds
 
 params:
   SSH_PRIV_KEY:

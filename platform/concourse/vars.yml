@@ -3,3 +3,6 @@ github:
   url: git@github.com
   user: bzhtux
   repo: sandbox
+
+p-concourse-version: 5.5.3
+concourse-release-version: '5.5.3 BOSH Deployment'

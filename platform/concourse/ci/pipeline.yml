@@ -4,13 +4,13 @@ anchors:
     on_failure:
       do:
       - put: notify
-        inputs: ['ci-repo']
+        inputs: ['ci-repo', 'bosh-states', 'bosh-creds']
         params:
           alert_type: failed
     on_error:
       do:
       - put: notify
-        inputs: ['ci-repo']
+        inputs: ['ci-repo', 'bosh-states', 'bosh-creds']
         params:
           alert_type: failed          
 
@@ -24,7 +24,11 @@ groups:
   - configure-UAA
   - BOSH-delete-env
   - CREDHUB
+  - Download concourse release
   - CONCOURSE
+- name: artefacts
+  jobs:
+  - Download concourse release
 - name: deploy
   jobs:
   - terraform-plan
@@ -55,7 +59,18 @@ resource_types:
   source:
     repository: arbourd/concourse-slack-alert-resource    
 
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
 resources:
+- name: every-day
+  type: time
+  source:
+    interval: 24h
+
 - name: notify
   type: slack-alert
   source:
@@ -97,6 +112,30 @@ resources:
       json_key: ((gcp.credentials))
   icon: harddisk
 
+- name: concourse-pivnet
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: p-concourse
+    product_version: ((concourse-release-version))
+  icon: cloud
+
+- name: concourse-release
+  type: gcs
+  source:
+      bucket: concourse
+      regexp: ((env_name))/releases/concourse-bosh-release-(.*).tgz
+      json_key: ((gcp.credentials))
+  icon: harddisk
+
+- name: concourse-config
+  type: gcs
+  source:
+      bucket: concourse
+      regexp: ((env_name))/config/((iaas))
+      json_key: ((gcp.credentials))
+  icon: harddisk
+
 - name: bosh-states
   type: gcs
   source:
@@ -114,6 +153,18 @@ resources:
   icon: harddisk
 
 jobs:
+- name: Download concourse release
+  plan:
+  - in_parallel:
+    - get: every-day
+      trigger: true
+    - get: concourse-pivnet
+  - put: concourse-release
+    inputs:
+      - concourse-pivnet
+    params:
+      file: concourse-pivnet/concourse-bosh-release-((p-concourse-version)).tgz
+
 - name: terraform-plan
   plan:
   - in_parallel:
@@ -236,9 +287,17 @@ jobs:
     - get: terraform
       trigger: true
       passed: [BOSH]
+    - get: bosh-states
+      <<: *notify-slack
+    - get: bosh-creds
+      <<: *notify-slack
   - task: deploy
     image: ci-image
     file: "ci-repo/platform/bosh/ci/delete.yml"
+    input_mapping:
+      state: bosh-states
+      creds: bosh-creds
+
     params:
       SSH_PRIV_KEY: ((ssh.priv_key))
       SSH_USERNAME: ((ssh.user))
@@ -272,6 +331,7 @@ jobs:
     - get: terraform
       trigger: true
       passed: [CREDHUB]
+    - get: concourse-config
   - task: deploy
     image: ci-image
     file: "ci-repo/platform/concourse/ci/task.yml"

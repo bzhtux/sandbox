@@ -69,6 +69,7 @@ sudo mv /tmp/bosh /usr/local/bin/
 
 
 # APT
+sudo apt update
 sudo apt install -y curl \
 golang-go \
 make \
@@ -86,10 +87,10 @@ set +euo pipefail
 
 # scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc "${TMP_DIR}"/boshrc
 
-if [ -f "${TMP_DIR}/boshrc" ]
+if [ -f "/home/${SSH_USERNAME}/.boshrc" ]
 then
   # shellcheck source=/dev/null
-  . "${TMP_DIR}/boshrc"
+  . "/home/${SSH_USERNAME}/.boshrc"
 fi
 
 if timeout 5 bosh env
@@ -118,9 +119,8 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var subnetwork="${BOSH_SUBNET}" \
 --var tags=[bosh,ssh] \
 --var zone="europe-west1-c" \
---vars-env GOCACHE=/tmp/.cache/go-build
-
-cat > ~/.boshrc <<EOIF
+--vars-env GOCACHE=/tmp/.cache/go-build \
+&& cat > ~/.boshrc <<EOIF
 export BOSH_CA_CERT="$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)"
 export BOSH_CLIENT=admin
 export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
