@@ -16,10 +16,6 @@ BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
 TIMESTAMP=$(date +%s)
 BOSH_IP="${BOSH_GW%.1}.10"
 BOSH_VERSION="6.0.0"
-CREDS_FILE=""
-CA_CERT=""
-SECRET=""
-
 
 # tearDown
 tearDown(){
@@ -41,18 +37,6 @@ cat > "${TMP_DIR}"/bosh.sh <<EOF
 #!/usr/bin/env bash
 
 set -xeuo pipefail
-
-# VARIABLES
-# TMP_DIR=$(mktemp -d /tmp/bosh.XXXXXX)
-# BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
-# BOSH_CIDR=${BOSH_CIDR}
-# BOSH_GW=${BOSH_GW}
-# BOSH_IP="${BOSH_GW%.1}.10"
-# BOSH_SUBNET=${BOSH_SUBNET}
-# DNS=${DNS}
-# NET_NAME=${NET_NAME}
-# PROJECT_ID=${PROJECT_ID}
-# TIMESTAMP=$(date +%s)
 
 # tearDown
 tearDown(){
@@ -104,7 +88,7 @@ fi
 
 set -xeuo pipefail
 
-if bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
+bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --state "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json" \
 --ops-file "${TMP_DIR}/bosh/gcp/cpi.yml" \
 --ops-file "${TMP_DIR}/bosh/uaa.yml" \
@@ -121,26 +105,36 @@ if bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var subnetwork="${BOSH_SUBNET}" \
 --var tags=[bosh,ssh] \
 --var zone="europe-west1-c"
-then
-  export CREDS_FILE=$(ls -1 "${WORKDIR}/bosh-creds/")
-  export CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/${CREDS_FILE}" --path /director_ssl/ca)
-  export SECRET=$(bosh int "${WORKDIR}/bosh-creds/${CREDS_FILE}" --path /admin_password)
-  cat > ~/.boshrc <<EOIF
-export BOSH_CA_CERT=${CA_CERT}
-export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=${SECRET}
-export BOSH_ENVIRONMENT=${BOSH_IP}
-EOIF
-fi
 
 EOF
 
 
 chmod +x "${TMP_DIR}"/bosh.sh
 
+# SCP INIT
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/gcp_creds.json "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/gcp_creds.json"
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/bosh.sh "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/bosh.sh"
+
+# SSH RUN
 ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}" "/home/${SSH_USERNAME}/bosh.sh"
 
+# SCP FINAL
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}:${WORKDIR}/bosh-state/state-${TIMESTAMP}.json" "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json"
 scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}:${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml"
+
+# GET CREDS
+CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)
+SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
+
+# CREATE BOSHRC
+cat > "${TMP_DIR}"/boshrc <<EOIF
+export BOSH_CA_CERT=${CA_CERT}
+export BOSH_CLIENT=admin
+export BOSH_CLIENT_SECRET=${SECRET}
+export BOSH_ENVIRONMENT=${BOSH_IP}
+EOIF
+
+scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${TMP_DIR}"/boshrc "${SSH_USERNAME}@jbx.${DNS%.}:/home/${SSH_USERNAME}/.boshrc"
+
+# CLEAN
+ssh -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}" "rm -rf ${WORKDIR}"
