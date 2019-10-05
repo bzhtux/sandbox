@@ -85,8 +85,6 @@ export GOCACHE=/tmp/.cache/go-build
 
 set +euo pipefail
 
-# scp -i "${TMP_DIR}"/ssh_priv_key -o StrictHostKeyChecking=no "${SSH_USERNAME}@jbx.${DNS%.}":~/.boshrc "${TMP_DIR}"/boshrc
-
 if [ -f "/home/${SSH_USERNAME}/.boshrc" ]
 then
   # shellcheck source=/dev/null
@@ -118,12 +116,15 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
 --var tags=[bosh,ssh] \
---var zone="europe-west1-c" \
---vars-env GOCACHE=/tmp/.cache/go-build \
-&& cat > ~/.boshrc <<EOIF
-export BOSH_CA_CERT="$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)"
+--var zone="europe-west1-c"
+
+CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)
+SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
+
+cat > ~/.boshrc <<EOIF
+export BOSH_CA_CERT=${CA_CERT}
 export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
+export BOSH_CLIENT_SECRET=${SECRET}
 export BOSH_ENVIRONMENT=${BOSH_IP}
 EOIF
 
