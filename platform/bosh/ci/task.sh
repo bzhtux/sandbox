@@ -100,7 +100,7 @@ fi
 
 set -xeuo pipefail
 
-bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
+if bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --state "${WORKDIR}/bosh-state/state-${TIMESTAMP}.json" \
 --ops-file "${TMP_DIR}/bosh/gcp/cpi.yml" \
 --ops-file "${TMP_DIR}/bosh/uaa.yml" \
@@ -116,15 +116,17 @@ bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var project_id="${PROJECT_ID}" \
 --var subnetwork="${BOSH_SUBNET}" \
 --var tags=[bosh,ssh] \
---var zone="europe-west1-c" \
-&& export CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)
-&& SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
-&& cat > ~/.boshrc <<EOIF
-export BOSH_CA_CERT=${CA_CERT}
-export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=${SECRET}
-export BOSH_ENVIRONMENT=${BOSH_IP}
-EOIF
+--var zone="europe-west1-c"
+then
+  export CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)
+  SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
+  cat > ~/.boshrc <<EOIF
+  export BOSH_CA_CERT=${CA_CERT}
+  export BOSH_CLIENT=admin
+  export BOSH_CLIENT_SECRET=${SECRET}
+  export BOSH_ENVIRONMENT=${BOSH_IP}
+  EOIF
+fi
 
 EOF
 
