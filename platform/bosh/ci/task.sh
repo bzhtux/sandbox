@@ -118,14 +118,14 @@ if bosh create-env "${TMP_DIR}"/bosh/bosh.yml \
 --var tags=[bosh,ssh] \
 --var zone="europe-west1-c"
 then
-  export CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /director_ssl/ca)
-  SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-${TIMESTAMP}.yml" --path /admin_password)
+  export CA_CERT=$(bosh int "${WORKDIR}/bosh-creds/creds-*.yml" --path /director_ssl/ca)
+  export SECRET=$(bosh int "${WORKDIR}/bosh-creds/creds-*.yml" --path /admin_password)
   cat > ~/.boshrc <<EOIF
-  export BOSH_CA_CERT=${CA_CERT}
-  export BOSH_CLIENT=admin
-  export BOSH_CLIENT_SECRET=${SECRET}
-  export BOSH_ENVIRONMENT=${BOSH_IP}
-  EOIF
+export BOSH_CA_CERT=${CA_CERT}
+export BOSH_CLIENT=admin
+export BOSH_CLIENT_SECRET=${SECRET}
+export BOSH_ENVIRONMENT=${BOSH_IP}
+EOIF
 fi
 
 EOF
