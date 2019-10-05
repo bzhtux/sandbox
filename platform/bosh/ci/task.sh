@@ -16,9 +16,9 @@ BOSH_GIT_URL="https://github.com/cloudfoundry/bosh-deployment.git"
 TIMESTAMP=$(date +%s)
 BOSH_IP="${BOSH_GW%.1}.10"
 BOSH_VERSION="6.0.0"
-export CREDS_FILE
-export CA_CERT
-export SECRET
+CREDS_FILE=""
+CA_CERT=""
+SECRET=""
 
 
 # tearDown
